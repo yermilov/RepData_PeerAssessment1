@@ -141,30 +141,17 @@ Now let's find which 5-minute interval, on average across all the days in the da
 
 ```r
 max_interval <- slice(mean_of_steps_per_interval, which.max(mean_of_steps_per_interval$mean_steps))
-max_interval
 ```
-
-```
-## Source: local data frame [1 x 2]
-## 
-##   interval mean_steps
-## 1      835   206.1698
-```
-So, interval #835 contains the maximum number of steps, on average across all the days in the dataset, and its value is 206.1698113.
+Interval #835 contains the maximum number of steps, on average across all the days in the dataset, and its value is 206.1698113.
 
 ## Imputing missing values
 
+We can note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data. Let's calculate the total number of missing values in the dataset:
 
 ```r
-summarize(filter(data, is.na(steps)), n())
+na_count <- summarize(filter(data, is.na(steps)), n())
 ```
-
-```
-## Source: local data frame [1 x 1]
-## 
-##    n()
-## 1 2304
-```
+The the total number of missing values in the dataset is 2304.
 
 
 ```r
