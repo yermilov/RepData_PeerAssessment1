@@ -2,24 +2,81 @@
 title: "Reproducible Research: Peer Assessment 1"
 output: 
   html_document:
+    self_contained: true
     keep_md: true
 ---
 
 
 ## Loading and preprocessing the data
 
+Firslty, let's unzip and load data:
+```{r}
+unzip('activity.zip')
+csv_data <- read.csv('activity.csv', colClasses = c("numeric", "character", "numeric"))
+```
 
+dplyr package will be used for further processing:
+```{r}
+library(dplyr)
+data <- tbl_df(csv_data)
+data
+```
 
 ## What is mean total number of steps taken per day?
 
+```{r}
+steps_per_day <- group_by(data, date)
+sum_of_steps_per_day <- summarise(steps_per_day, sum_steps = sum(steps))
+hist(sum_of_steps_per_day$sum_steps)
+```
 
+```{r}
+summarise(steps_per_day, mean_steps = mean(steps))
+```
 
 ## What is the average daily activity pattern?
 
+```{r}
+steps_per_interval <- group_by(data, interval)
+mean_of_steps_per_interval <- summarise(steps_per_interval, mean_steps = mean(steps, na.rm=TRUE))
+plot(mean_of_steps_per_interval$interval, mean_of_steps_per_interval$mean_steps, type="l")
+```
 
+```{r}
+slice(mean_of_steps_per_interval, which.max(mean_of_steps_per_interval$mean_steps))
+```
 
 ## Imputing missing values
 
+```{r}
+summarize(filter(data, is.na(steps)), n())
+```
 
+```{r}
+nona_data <- mutate(data, steps = ifelse(is.na(steps), slice(mean_of_steps_per_interval, which(mean_of_steps_per_interval$interval == interval))$mean_steps, steps))
+nona_data
+```
+
+```{r}
+nona_steps_per_day <- group_by(nona_data, date)
+nona_sum_of_steps_per_day <- summarise(nona_steps_per_day, sum_steps = sum(steps))
+hist(nona_sum_of_steps_per_day$sum_steps)
+```
+
+```{r}
+summarise(nona_steps_per_day, mean_steps = mean(steps))
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+```{r}
+datetype_data <- mutate(data, day_type = as.factor(ifelse(weekdays(as.Date(nona_data$date)) %in% c("суббота", "воскресенье"), 'weekend', 'weekday')))
+datetype_steps_per_interval <- group_by(datetype_data, interval, day_type)
+datetype_mean_of_steps_per_interval <- summarise(datetype_steps_per_interval, mean_steps = mean(steps, na.rm=TRUE))
+
+weekday_mean_of_steps_per_interval <- filter(datetype_mean_of_steps_per_interval, day_type == "weekday")
+weekend_mean_of_steps_per_interval <- filter(datetype_mean_of_steps_per_interval, day_type == "weekend")
+par(mfrow = c(2, 1))
+plot(weekday_mean_of_steps_per_interval$interval, weekday_mean_of_steps_per_interval$mean_steps, type="l")
+plot(weekend_mean_of_steps_per_interval$interval, weekend_mean_of_steps_per_interval$mean_steps, type="l")
+```
