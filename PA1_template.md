@@ -2,7 +2,6 @@
 title: "Reproducible Research: Peer Assessment 1"
 output: 
   html_document:
-    self_contained: true
     keep_md: true
 ---
 
@@ -43,11 +42,12 @@ data
 
 ## What is mean total number of steps taken per day?
 
+Let's look at a histogram of the total number of steps taken each day:
 
 ```r
 steps_per_day <- group_by(data, date)
 sum_of_steps_per_day <- summarise(steps_per_day, sum_steps = sum(steps))
-hist(sum_of_steps_per_day$sum_steps)
+hist(sum_of_steps_per_day$sum_steps, main = "Total number of steps taken each day", xlab = "Steps taken", ylab = "Number")
 ```
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
