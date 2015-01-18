@@ -275,6 +275,7 @@ We can see, that for all not-NA values, number of steps was not changed.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
+Let's look at a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days.
 
 ```r
 datetype_data <- mutate(data, day_type = as.factor(ifelse(weekdays(as.Date(nona_data$date)) %in% c("суббота", "воскресенье"), 'weekend', 'weekday')))
@@ -284,8 +285,8 @@ datetype_mean_of_steps_per_interval <- summarise(datetype_steps_per_interval, me
 weekday_mean_of_steps_per_interval <- filter(datetype_mean_of_steps_per_interval, day_type == "weekday")
 weekend_mean_of_steps_per_interval <- filter(datetype_mean_of_steps_per_interval, day_type == "weekend")
 par(mfrow = c(2, 1))
-plot(weekday_mean_of_steps_per_interval$interval, weekday_mean_of_steps_per_interval$mean_steps, type="l")
-plot(weekend_mean_of_steps_per_interval$interval, weekend_mean_of_steps_per_interval$mean_steps, type="l")
+plot(weekday_mean_of_steps_per_interval$interval, weekday_mean_of_steps_per_interval$mean_steps, type="l", main = "Average weekday activity pattern", xlab = "5-minute interval", ylab = "Number of steps taken")
+plot(weekend_mean_of_steps_per_interval$interval, weekend_mean_of_steps_per_interval$mean_steps, type="l", main = "Average weekend activity pattern", xlab = "5-minute interval", ylab = "Number of steps taken")
 ```
 
 ![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png) 
