@@ -30,8 +30,9 @@ sum_of_steps_per_day <- summarise(steps_per_day, sum_steps = sum(steps))
 hist(sum_of_steps_per_day$sum_steps, main = "Total number of steps taken each day", xlab = "Steps taken", ylab = "Number")
 ```
 
+Let's look at mean and median total number of steps taken per day:
 ```{r}
-summarise(steps_per_day, mean_steps = mean(steps))
+summarise(steps_per_day, mean_steps = mean(steps), median_steps = median(steps))
 ```
 
 ## What is the average daily activity pattern?
