@@ -127,18 +127,21 @@ summarise(steps_per_day, mean_steps = mean(steps), median_steps = median(steps))
 
 ## What is the average daily activity pattern?
 
+Let's look at a time series plot of the 5-minute interval and the average number of steps taken, averaged across all days:
 
 ```r
 steps_per_interval <- group_by(data, interval)
 mean_of_steps_per_interval <- summarise(steps_per_interval, mean_steps = mean(steps, na.rm=TRUE))
-plot(mean_of_steps_per_interval$interval, mean_of_steps_per_interval$mean_steps, type="l")
+plot(mean_of_steps_per_interval$interval, mean_of_steps_per_interval$mean_steps, type="l", main = "Average daily activity pattern", xlab = "5-minute interval", ylab = "Number of steps taken, averaged across all days")
 ```
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
+Now let's find which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps:
 
 ```r
-slice(mean_of_steps_per_interval, which.max(mean_of_steps_per_interval$mean_steps))
+max_interval <- slice(mean_of_steps_per_interval, which.max(mean_of_steps_per_interval$mean_steps))
+max_interval
 ```
 
 ```
@@ -147,6 +150,7 @@ slice(mean_of_steps_per_interval, which.max(mean_of_steps_per_interval$mean_step
 ##   interval mean_steps
 ## 1      835   206.1698
 ```
+So, interval #835 contains the maximum number of steps, on average across all the days in the dataset, and its value is 206.1698113.
 
 ## Imputing missing values
 
