@@ -153,6 +153,7 @@ na_count <- summarize(filter(data, is.na(steps)), n())
 ```
 The the total number of missing values in the dataset is 2304.
 
+Let's fill in all of the missing values in the dataset. The filling strategy is to use the mean for corresponding 5-minute interval:
 
 ```r
 nona_data <- mutate(data, steps = ifelse(is.na(steps), slice(mean_of_steps_per_interval, which(mean_of_steps_per_interval$interval == interval))$mean_steps, steps))
